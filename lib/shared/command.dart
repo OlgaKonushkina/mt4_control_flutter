@@ -120,3 +120,28 @@ class SetDoublerCommand implements Command {
   @override
   Duration get timeout => const Duration(seconds: 2);
 }
+
+class SetATTCommand implements Command {
+  final String att;
+  final int _value;
+
+  SetATTCommand(this.att, this._value);
+
+  @override
+  String get name => 'ATT$att';
+
+  @override
+  dynamic get value => _value;
+
+  @override
+  bool validate() {
+    if (att == '1') return _value == 0 || _value == 1 || _value == 2;
+    return _value == 0 || _value == 1;
+  }
+
+  @override
+  int get retries => 3;
+
+  @override
+  Duration get timeout => const Duration(seconds: 2);
+}

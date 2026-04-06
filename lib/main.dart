@@ -4,9 +4,14 @@ import 'shared/di_container.dart' as di;
 import 'shared/theme_provider.dart';
 import 'features/generator/generator.dart';
 import 'features/ps/ps.dart';
+import 'features/att/att.dart';
+import 'features/ps/di/ps_injection.dart';
+import 'features/att/di/att_injection.dart';
 
 void main() {
   di.setupDependencies();
+  setupPSDependencies();
+  setupATTDependencies();
   
   final themeProvider = di.getIt<ThemeProvider>();
   
@@ -74,6 +79,8 @@ class MainScreen extends StatelessWidget {
                         GeneratorWidget(),
                         SizedBox(height: 16),
                         PSWidget(),
+                        SizedBox(height: 16),
+                        ATTWidget(),
                       ],
                     ),
                   ),

@@ -10,6 +10,7 @@
         "equatable",
         "event_bus",
         "flutter",
+        "flutter_bloc",
         "flutter_blue_plus",
         "get_it",
         "provider"
@@ -60,6 +61,15 @@
         "async",
         "collection",
         "meta"
+      ]
+    },
+    {
+      "name": "flutter_bloc",
+      "version": "8.1.6",
+      "dependencies": [
+        "bloc",
+        "flutter",
+        "provider"
       ]
     },
     {
@@ -200,6 +210,13 @@
       "version": "2.13.1",
       "dependencies": [
         "collection",
+        "meta"
+      ]
+    },
+    {
+      "name": "bloc",
+      "version": "8.1.4",
+      "dependencies": [
         "meta"
       ]
     },
