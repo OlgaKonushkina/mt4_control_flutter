@@ -1,6 +1,7 @@
 import 'connection.dart';
+import 'ble_connection.dart';
 
-enum ConnectionType { mock }
+enum ConnectionType { mock, ethernet, ble }
 
 class ConnectionFactory {
   static IConnection create(ConnectionType type, {
@@ -12,6 +13,10 @@ class ConnectionFactory {
     switch (type) {
       case ConnectionType.mock:
         return MockConnection();
+      case ConnectionType.ethernet:
+        return EthernetConnection(host: host, port: port);
+      case ConnectionType.ble:
+        return BleConnection();
     }
   }
 }

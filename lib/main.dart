@@ -7,7 +7,7 @@ import 'shared/di_container.dart' as di;
 import 'shared/theme_provider.dart';
 
 void main() {
-  di.setupDependencies(type: ConnectionType.mock);
+  di.setupDependencies(type: ConnectionType.ble);
   
   final themeProvider = di.getIt<ThemeProvider>();
   
@@ -55,11 +55,11 @@ class MainScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: DefaultTabController(
+      body: const DefaultTabController(
         length: 2,
         child: Column(
           children: [
-            const TabBar(
+            TabBar(
               tabs: [
                 Tab(text: 'Управление'),
                 Tab(text: 'Аналитика'),
@@ -70,13 +70,13 @@ class MainScreen extends StatelessWidget {
                 children: [
                   // Вкладка "Управление" — здесь будут все виджеты
                   SingleChildScrollView(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: EdgeInsets.all(16.0),
                     child: Column(
                       children: [
-                        const GeneratorWidget(),
-                        const SizedBox(height: 16),
-                        const PSWidget(),
-                        const SizedBox(height: 16),
+                        GeneratorWidget(),
+                        SizedBox(height: 16),
+                        PSWidget(),
+                        SizedBox(height: 16),
                         // TODO: ATTWidget
                         // TODO: ControlWidget
                         // TODO: StatusWidget
@@ -85,7 +85,7 @@ class MainScreen extends StatelessWidget {
                     ),
                   ),
                   // Вкладка "Аналитика" — пока заглушка
-                  const Center(child: Text('Аналитика (в разработке)')),
+                  Center(child: Text('Аналитика (в разработке)')),
                 ],
               ),
             ),
