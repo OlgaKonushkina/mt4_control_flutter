@@ -1,0 +1,21 @@
+# IDE
+.vscode/
+*.code-workspace
+
+# Android
+android/local.properties
+android/app/local.properties
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.podspec
+
+# Web
+/build/web/
+
+# Windows
+/windows/build/
+
+# Mac
+macos/build/
