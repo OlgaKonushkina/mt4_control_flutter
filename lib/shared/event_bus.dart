@@ -1,7 +1,12 @@
 import 'package:event_bus/event_bus.dart';
-import '../core/interfaces.dart';
 
 final eventBus = EventBus();
+
+abstract class IEventBus {
+  void subscribe<T>(void Function(T event) handler);
+  void unsubscribe<T>(void Function(T event) handler);
+  void publish<T>(T event);
+}
 
 class AppEventBus implements IEventBus {
   @override
@@ -11,7 +16,7 @@ class AppEventBus implements IEventBus {
 
   @override
   void unsubscribe<T>(void Function(T event) handler) {
-    // временная заглушка
+    // Заглушка
   }
 
   @override

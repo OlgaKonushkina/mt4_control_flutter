@@ -50,6 +50,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "equatable",
+      "rootUri": "file:///C:/Users/admin/AppData/Local/Pub/Cache/hosted/pub.dev/equatable-2.0.8",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "event_bus",
       "rootUri": "file:///C:/Users/admin/AppData/Local/Pub/Cache/hosted/pub.dev/event_bus-2.0.1",
       "packageUri": "lib/",

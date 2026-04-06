@@ -1,4 +1,4 @@
-import '../../../core/interfaces.dart';
+import '../../../shared/event_bus.dart';
 import '../../../shared/app_events.dart';
 import '../../../shared/base_controller.dart';
 import '../services/generator_service.dart';

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'core/connection_factory.dart';
-import 'features/generator/generator.dart';
-import 'features/ps/ps.dart';
 import 'shared/di_container.dart' as di;
 import 'shared/theme_provider.dart';
+import 'features/generator/generator.dart';
+import 'features/ps/ps.dart';
 
 void main() {
-  di.setupDependencies(type: ConnectionType.ble);
+  di.setupDependencies();
   
   final themeProvider = di.getIt<ThemeProvider>();
   
@@ -68,7 +67,6 @@ class MainScreen extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  // Вкладка "Управление" — здесь будут все виджеты
                   SingleChildScrollView(
                     padding: EdgeInsets.all(16.0),
                     child: Column(
@@ -76,15 +74,9 @@ class MainScreen extends StatelessWidget {
                         GeneratorWidget(),
                         SizedBox(height: 16),
                         PSWidget(),
-                        SizedBox(height: 16),
-                        // TODO: ATTWidget
-                        // TODO: ControlWidget
-                        // TODO: StatusWidget
-                        // TODO: MonitorWidget
                       ],
                     ),
                   ),
-                  // Вкладка "Аналитика" — пока заглушка
                   Center(child: Text('Аналитика (в разработке)')),
                 ],
               ),

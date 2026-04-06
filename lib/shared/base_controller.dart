@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../core/interfaces.dart';
+import 'event_bus.dart';
 
 abstract class BaseController extends ChangeNotifier {
   final IEventBus eventBus;
