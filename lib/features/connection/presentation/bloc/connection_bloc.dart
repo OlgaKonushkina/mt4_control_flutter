@@ -9,6 +9,7 @@ class ConnectionBloc extends Bloc<ConnectionEvent, ConnState> {
   ConnectionBloc(this._repository) : super(ConnInitial()) {
     on<ConnectEvent>(_onConnect);
     on<DisconnectEvent>(_onDisconnect);
+    on<ChangeConnectionTypeEvent>(_onChangeType);
   }
 
   Future<void> _onConnect(ConnectEvent event, Emitter<ConnState> emit) async {
@@ -24,5 +25,8 @@ class ConnectionBloc extends Bloc<ConnectionEvent, ConnState> {
   Future<void> _onDisconnect(DisconnectEvent event, Emitter<ConnState> emit) async {
     await _repository.disconnect();
     emit(ConnDisconnected());
+  }
+
+  void _onChangeType(ChangeConnectionTypeEvent event, Emitter<ConnState> emit) {
   }
 }

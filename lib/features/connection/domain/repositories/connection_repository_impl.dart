@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import '../../../../core/ble_connection.dart';
 import '../../../../core/interfaces/connection.dart';
 import '../../domain/entities/connection_config.dart';
 import '../../domain/repositories/i_connection_repository.dart';
@@ -7,7 +8,6 @@ final getIt = GetIt.instance;
 
 class ConnectionRepositoryImpl implements IConnectionRepository {
   IConnection? _currentConnection;
-  ConnectionConfig? _currentConfig;
   bool _isConnected = false;
 
   @override
@@ -39,7 +39,8 @@ class ConnectionRepositoryImpl implements IConnectionRepository {
         );
         break;
       case ConnectionType.bluetooth:
-        return false;
+        connection = BleConnection();
+        break;
       case ConnectionType.serial:
         return false;
     }
@@ -47,14 +48,7 @@ class ConnectionRepositoryImpl implements IConnectionRepository {
     final success = await connection.connect();
     if (success) {
       _currentConnection = connection;
-      _currentConfig = config;
       _isConnected = true;
-      
-      if (getIt.isRegistered<IConnection>()) {
-        getIt.unregister<IConnection>();
-      }
-      getIt.registerSingleton<IConnection>(connection);
-      
       return true;
     }
     return false;
@@ -64,11 +58,6 @@ class ConnectionRepositoryImpl implements IConnectionRepository {
   Future<void> disconnect() async {
     _currentConnection?.disconnect();
     _currentConnection = null;
-    _currentConfig = null;
     _isConnected = false;
-    
-    if (getIt.isRegistered<IConnection>()) {
-      getIt.unregister<IConnection>();
-    }
   }
 }

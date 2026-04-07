@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import '../../../../core/ble_connection.dart';
 import '../../../../core/interfaces/connection.dart';
 import '../../domain/entities/connection_config.dart';
 import '../../domain/repositories/i_connection_repository.dart';
@@ -38,10 +39,9 @@ class ConnectionRepositoryImpl implements IConnectionRepository {
         );
         break;
       case ConnectionType.bluetooth:
-        // TODO: реализовать BLE
-        return false;
+        connection = BleConnection();
+        break;
       case ConnectionType.serial:
-        // TODO: реализовать Serial
         return false;
     }
 
@@ -49,12 +49,6 @@ class ConnectionRepositoryImpl implements IConnectionRepository {
     if (success) {
       _currentConnection = connection;
       _isConnected = true;
-      
-      if (getIt.isRegistered<IConnection>()) {
-        getIt.unregister<IConnection>();
-      }
-      getIt.registerSingleton<IConnection>(connection);
-      
       return true;
     }
     return false;
@@ -65,9 +59,5 @@ class ConnectionRepositoryImpl implements IConnectionRepository {
     _currentConnection?.disconnect();
     _currentConnection = null;
     _isConnected = false;
-    
-    if (getIt.isRegistered<IConnection>()) {
-      getIt.unregister<IConnection>();
-    }
   }
 }
