@@ -304,14 +304,29 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
 
   Widget _buildStatus(ConnState state) {
     if (state is ConnConnected) {
-      return Text(
-        '✅ Подключено: ${state.config.type.name}${state.config.deviceName != null ? ' (${state.config.deviceName})' : ''}',
-        style: const TextStyle(color: Colors.green, fontSize: 12),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '✅ Подключено: ${state.config.type.name}${state.config.deviceName != null ? ' (${state.config.deviceName})' : ''}',
+            style: const TextStyle(color: Colors.green, fontSize: 12),
+          ),
+          if (state.serviceUuid != null)
+            Text(
+              'Service: ${state.serviceUuid}',
+              style: const TextStyle(fontSize: 10, color: Colors.grey),
+            ),
+          if (state.characteristicUuid != null)
+            Text(
+              'Characteristic: ${state.characteristicUuid}',
+              style: const TextStyle(fontSize: 10, color: Colors.grey),
+            ),
+        ],
       );
     } else if (state is ConnConnecting) {
-      return Text(
+      return const Text(
         '🟡 Подключение...',
-        style: const TextStyle(color: Colors.orange, fontSize: 12),
+        style: TextStyle(color: Colors.orange, fontSize: 12),
       );
     } else if (state is ConnError) {
       return Text(

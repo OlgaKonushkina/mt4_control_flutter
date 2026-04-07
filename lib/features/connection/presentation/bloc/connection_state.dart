@@ -21,11 +21,13 @@ class ConnConnecting extends ConnState {
 
 class ConnConnected extends ConnState {
   final ConnectionConfig config;
+  final String? serviceUuid;
+  final String? characteristicUuid;
 
-  const ConnConnected(this.config);
+  const ConnConnected(this.config, {this.serviceUuid, this.characteristicUuid});
 
   @override
-  List<Object?> get props => [config.type];
+  List<Object?> get props => [config.type, serviceUuid, characteristicUuid];
 }
 
 class ConnDisconnected extends ConnState {}

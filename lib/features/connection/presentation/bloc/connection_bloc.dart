@@ -14,12 +14,8 @@ class ConnectionBloc extends Bloc<ConnectionEvent, ConnState> {
 
   Future<void> _onConnect(ConnectEvent event, Emitter<ConnState> emit) async {
     emit(ConnConnecting(event.config));
-    final success = await _repository.connect(event.config);
-    if (success) {
-      emit(ConnConnected(event.config));
-    } else {
-      emit(const ConnError('Failed to connect'));
-    }
+    final result = await _repository.connect(event.config);
+    emit(result);
   }
 
   Future<void> _onDisconnect(DisconnectEvent event, Emitter<ConnState> emit) async {
@@ -28,5 +24,6 @@ class ConnectionBloc extends Bloc<ConnectionEvent, ConnState> {
   }
 
   void _onChangeType(ChangeConnectionTypeEvent event, Emitter<ConnState> emit) {
+    // Просто меняем тип
   }
 }

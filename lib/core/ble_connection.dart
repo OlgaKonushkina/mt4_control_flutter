@@ -1,14 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import '../shared/app_events.dart';
-import '../shared/event_bus.dart';
+import '../../shared/app_events.dart';
+import '../../shared/event_bus.dart';
 import 'interfaces/connection.dart';
+
+const String SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
+const String CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 
 class BleConnection implements IConnection {
   BluetoothDevice? _device;
   BluetoothCharacteristic? _characteristic;
   bool _isConnected = false;
   bool _isConnecting = false;
+  
+  String? connectedServiceUuid;
+  String? connectedCharacteristicUuid;
 
   @override
   Future<bool> connect() async {
@@ -16,15 +22,15 @@ class BleConnection implements IConnection {
     _isConnecting = true;
 
     try {
-      debugPrint('[BLE] Starting scan...');
       await FlutterBluePlus.startScan(timeout: const Duration(seconds: 5));
       
       BluetoothDevice? foundDevice;
       final subscription = FlutterBluePlus.scanResults.listen((results) {
         for (final result in results) {
-          debugPrint('[BLE] Found device: ${result.device.name}');
-          if (result.device.name.contains('ESP32') || result.device.name.contains('MT4')) {
+          final name = result.device.name;
+          if (name.contains('ESP32') || name.contains('MT4')) {
             foundDevice = result.device;
+            debugPrint('[BLE] Found device: $name (${result.device.id.id})');
           }
         }
       });
@@ -58,9 +64,15 @@ class BleConnection implements IConnection {
   Future<void> _discoverServices() async {
     final services = await _device!.discoverServices();
     for (final service in services) {
+      debugPrint('[BLE] Service: ${service.uuid}');
       for (final characteristic in service.characteristics) {
-        if (characteristic.properties.write) {
+        debugPrint('[BLE]   Characteristic: ${characteristic.uuid}');
+        
+        if (characteristic.uuid.toString() == CHARACTERISTIC_UUID) {
+          debugPrint('[BLE] Found target characteristic!');
           _characteristic = characteristic;
+          connectedServiceUuid = service.uuid.toString();
+          connectedCharacteristicUuid = characteristic.uuid.toString();
           await _characteristic!.setNotifyValue(true);
           _characteristic!.value.listen((data) {
             final response = String.fromCharCodes(data);
@@ -69,12 +81,14 @@ class BleConnection implements IConnection {
               eventBus.fire(CommandAcknowledgedEvent(response));
             }
           });
-          debugPrint('[BLE] Characteristic found');
           return;
         }
       }
     }
-    debugPrint('[BLE] No writable characteristic found');
+    
+    if (_characteristic == null) {
+      debugPrint('[BLE] Warning: Target characteristic not found!');
+    }
   }
 
   @override
@@ -84,6 +98,8 @@ class BleConnection implements IConnection {
     _characteristic = null;
     _isConnected = false;
     _isConnecting = false;
+    connectedServiceUuid = null;
+    connectedCharacteristicUuid = null;
     debugPrint('[BLE] Disconnected');
   }
 

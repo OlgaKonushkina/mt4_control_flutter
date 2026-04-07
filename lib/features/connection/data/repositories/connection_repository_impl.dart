@@ -3,6 +3,7 @@ import '../../../../core/ble_connection.dart';
 import '../../../../core/interfaces/connection.dart';
 import '../../domain/entities/connection_config.dart';
 import '../../domain/repositories/i_connection_repository.dart';
+import '../../presentation/bloc/connection_state.dart';
 
 final getIt = GetIt.instance;
 
@@ -20,7 +21,7 @@ class ConnectionRepositoryImpl implements IConnectionRepository {
   bool get isConnected => _isConnected;
 
   @override
-  Future<bool> connect(ConnectionConfig config) async {
+  Future<ConnState> connect(ConnectionConfig config) async {
     await disconnect();
 
     IConnection? connection;
@@ -31,7 +32,7 @@ class ConnectionRepositoryImpl implements IConnectionRepository {
         break;
       case ConnectionType.wifi:
         if (config.host == null || config.port == null) {
-          return false;
+          return const ConnError('Wi-Fi: host or port missing');
         }
         connection = EthernetConnection(
           host: config.host!,
@@ -42,16 +43,24 @@ class ConnectionRepositoryImpl implements IConnectionRepository {
         connection = BleConnection();
         break;
       case ConnectionType.serial:
-        return false;
+        return const ConnError('Serial not implemented');
     }
 
     final success = await connection.connect();
     if (success) {
       _currentConnection = connection;
       _isConnected = true;
-      return true;
+      
+      if (connection is BleConnection) {
+        return ConnConnected(
+          config,
+          serviceUuid: connection.connectedServiceUuid,
+          characteristicUuid: connection.connectedCharacteristicUuid,
+        );
+      }
+      return ConnConnected(config);
     }
-    return false;
+    return const ConnError('Failed to connect');
   }
 
   @override
