@@ -321,6 +321,16 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
               'Characteristic: ${state.characteristicUuid}',
               style: const TextStyle(fontSize: 10, color: Colors.grey),
             ),
+          if (state.characteristicProperties != null && state.characteristicProperties!.isNotEmpty)
+            Text(
+              'Properties: ${state.characteristicProperties!.join(', ')}',
+              style: const TextStyle(fontSize: 10, color: Colors.grey),
+            ),
+          if (state.characteristicPropertiesValue != null)
+            Text(
+              'Properties value: ${state.characteristicPropertiesValue} (0x${state.characteristicPropertiesValue!.toRadixString(16)})',
+              style: const TextStyle(fontSize: 10, color: Colors.grey),
+            ),
         ],
       );
     } else if (state is ConnConnecting) {
@@ -338,5 +348,5 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
       '⏸ Отключено',
       style: TextStyle(color: Colors.grey, fontSize: 12),
     );
-  }
+ }
 }

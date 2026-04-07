@@ -56,6 +56,8 @@ class ConnectionRepositoryImpl implements IConnectionRepository {
           config,
           serviceUuid: connection.connectedServiceUuid,
           characteristicUuid: connection.connectedCharacteristicUuid,
+          characteristicProperties: connection.connectedCharacteristicProperties,
+          characteristicPropertiesValue: connection.connectedCharacteristicPropertiesValue,
         );
       }
       return ConnConnected(config);

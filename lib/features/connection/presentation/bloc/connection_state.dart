@@ -23,11 +23,25 @@ class ConnConnected extends ConnState {
   final ConnectionConfig config;
   final String? serviceUuid;
   final String? characteristicUuid;
+  final List<String>? characteristicProperties;
+  final int? characteristicPropertiesValue;
 
-  const ConnConnected(this.config, {this.serviceUuid, this.characteristicUuid});
+  const ConnConnected(
+    this.config, {
+    this.serviceUuid,
+    this.characteristicUuid,
+    this.characteristicProperties,
+    this.characteristicPropertiesValue,
+  });
 
   @override
-  List<Object?> get props => [config.type, serviceUuid, characteristicUuid];
+  List<Object?> get props => [
+        config.type,
+        serviceUuid,
+        characteristicUuid,
+        characteristicProperties,
+        characteristicPropertiesValue,
+      ];
 }
 
 class ConnDisconnected extends ConnState {}
