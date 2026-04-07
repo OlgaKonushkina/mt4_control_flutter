@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'shared/di_container.dart' as di;
 import 'shared/theme_provider.dart';
 import 'features/generator/generator.dart';
 import 'features/ps/ps.dart';
 import 'features/att/att.dart';
+import 'features/connection/connection.dart';
 import 'features/ps/di/ps_injection.dart';
 import 'features/att/di/att_injection.dart';
+import 'features/connection/di/connection_injection.dart';
+import 'features/connection/presentation/bloc/connection_bloc.dart';
 
 void main() {
   di.setupDependencies();
   setupPSDependencies();
   setupATTDependencies();
+  setupConnectionDependencies();
   
   final themeProvider = di.getIt<ThemeProvider>();
   
@@ -34,7 +39,10 @@ class MyApp extends StatelessWidget {
             theme: ThemeData.light(),
             darkTheme: ThemeData.dark(),
             themeMode: provider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-            home: const MainScreen(),
+            home: BlocProvider(
+              create: (_) => di.getIt<ConnectionBloc>(),
+              child: const MainScreen(),
+            ),
           );
         },
       ),
@@ -60,11 +68,12 @@ class MainScreen extends StatelessWidget {
         ],
       ),
       body: const DefaultTabController(
-        length: 2,
+        length: 3,
         child: Column(
           children: [
             TabBar(
               tabs: [
+                Tab(text: 'Подключение'),
                 Tab(text: 'Управление'),
                 Tab(text: 'Аналитика'),
               ],
@@ -72,6 +81,7 @@ class MainScreen extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
+                  ConnectionWidget(),
                   SingleChildScrollView(
                     padding: EdgeInsets.all(16.0),
                     child: Column(
