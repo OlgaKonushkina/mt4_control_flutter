@@ -7,10 +7,10 @@ import 'features/generator/generator.dart';
 import 'features/ps/ps.dart';
 import 'features/att/att.dart';
 import 'features/connection/connection.dart';
+import 'features/terminal/widgets/terminal_widget.dart';
 import 'features/ps/di/ps_injection.dart';
 import 'features/att/di/att_injection.dart';
 import 'features/connection/di/connection_injection.dart';
-import 'features/connection/presentation/bloc/connection_bloc.dart';
 
 void main() {
   di.setupDependencies();
@@ -68,20 +68,24 @@ class MainScreen extends StatelessWidget {
         ],
       ),
       body: const DefaultTabController(
-        length: 3,
+        length: 4,
         child: Column(
           children: [
             TabBar(
               tabs: [
                 Tab(text: 'Подключение'),
                 Tab(text: 'Управление'),
+                Tab(text: 'Терминал'),
                 Tab(text: 'Аналитика'),
               ],
             ),
             Expanded(
               child: TabBarView(
                 children: [
-                  ConnectionWidget(),
+                  SingleChildScrollView(
+                    padding: EdgeInsets.all(16.0),
+                    child: ConnectionWidget(),
+                  ),
                   SingleChildScrollView(
                     padding: EdgeInsets.all(16.0),
                     child: Column(
@@ -93,6 +97,10 @@ class MainScreen extends StatelessWidget {
                         ATTWidget(),
                       ],
                     ),
+                  ),
+                  SingleChildScrollView(
+                    padding: EdgeInsets.all(16.0),
+                    child: TerminalWidget(),
                   ),
                   Center(child: Text('Аналитика (в разработке)')),
                 ],
